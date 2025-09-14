@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LeoView: View {
     @State private var isFlipped = false
-    @State private var startTime = Date()
     @State private var floatingOffset: CGFloat = 0
     @State private var animationTimer: Timer?
     @State private var animationResetTrigger = false
@@ -105,7 +104,6 @@ struct LeoView: View {
                 }
             }
             .onAppear {
-                startTime = Date()
                 startFloatingAnimation()
                 startSpotlightAnimation()
             }
