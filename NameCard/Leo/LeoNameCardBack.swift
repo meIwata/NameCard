@@ -83,10 +83,8 @@ struct LeoNameCardBack: View {
     
     private func startAnimation() {
         rotationAngle = 0
-        DispatchQueue.main.async {
-            withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
-                rotationAngle = 360
-            }
+        withAnimation(.linear(duration: 8).repeatForever(autoreverses: false)) {
+            rotationAngle = 360
         }
     }
 }
