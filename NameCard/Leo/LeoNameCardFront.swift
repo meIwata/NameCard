@@ -21,13 +21,13 @@ struct LeoNameCardFront: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(contact.displayName)
                     .font(.system(size: 24, weight: .bold, design: .rounded))
-                    .foregroundColor(.black)
+                    .foregroundStyle(.black)
                     .shadow(color: .white.opacity(0.5), radius: 1, x: 0, y: 1)
                     .padding(.top, 18)
 
                 Text(contact.title)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.gray.opacity(0.8))
+                    .foregroundStyle(.gray.opacity(0.8))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 3)
                     .background(
@@ -52,11 +52,11 @@ struct LeoNameCardFront: View {
                     HStack(spacing: 6) {
                         Image(systemName: "globe")
                             .font(.system(size: 10))
-                            .foregroundColor(.blue)
+                            .foregroundStyle(.blue)
                         
                         Text(contact.website)
                             .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(.blue)
+                            .foregroundStyle(.blue)
                             .underline()
                     }
                 }

@@ -20,13 +20,13 @@ struct LeoNameCardBack: View {
             VStack(spacing: 12) {
                 Text(contact.organization)
                     .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundColor(.black)
+                    .foregroundStyle(.black)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
 
                 Text(contact.department)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.gray.opacity(0.8))
+                    .foregroundStyle(.gray.opacity(0.8))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 4)
                     .background(
@@ -50,7 +50,7 @@ struct LeoNameCardBack: View {
 
                 Text("SCAN TO CONNECT")
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(.black.opacity(0.8))
+                    .foregroundStyle(.black.opacity(0.8))
                     .tracking(0.5)
             }
 

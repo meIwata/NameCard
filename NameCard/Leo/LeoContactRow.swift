@@ -15,12 +15,12 @@ struct LeoContactRow: View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.system(size: 10))
-                .foregroundColor(.gray)
+                .foregroundStyle(.gray)
                 .frame(width: 12)
             
             Text(text)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundColor(.black.opacity(0.8))
+                .foregroundStyle(.black.opacity(0.8))
         }
     }
 }

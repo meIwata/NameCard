@@ -25,7 +25,7 @@ struct LeoQRCodeView: View {
                 .overlay(
                     Image(systemName: "qrcode")
                         .font(.system(size: 30))
-                        .foregroundColor(.black)
+                        .foregroundStyle(.black)
                 )
         }
     }
