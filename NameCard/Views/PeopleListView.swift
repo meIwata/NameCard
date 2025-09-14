@@ -63,8 +63,8 @@ struct PersonDetailView: View {
     var body: some View {
         Group {
             if let contact = person.contact {
-                if let card = person.nameCard {
-                    card()
+                if let nameCard = person.nameCard {
+                    AnyView(nameCard)
                 } else {
                     HarryView(contact: contact)
                 }

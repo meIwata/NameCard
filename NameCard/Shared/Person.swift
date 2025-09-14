@@ -11,9 +11,9 @@ struct Person: Identifiable {
     let name: String
     let type: PersonType
     let contact: Contact?
-    let nameCard: (() -> AnyView)?
+    let nameCard: (any View)?
     
-    init(name: String, type: PersonType, contact: Contact? = nil, nameCard: (() -> AnyView)? = nil) {
+    init(name: String, type: PersonType, contact: Contact? = nil, nameCard: (any View)? = nil) {
         self.name = name
         self.type = type
         self.contact = contact
@@ -24,6 +24,6 @@ struct Person: Identifiable {
 extension Person {
     static let sampleData: [Person] = [
         Person(name: "Harry", type: .teacher, contact: Contact.sampleData),
-        Person(name: "Leo", type: .student, contact: LeoView.contact, nameCard: { AnyView(LeoView()) }),
+        Person(name: "Leo", type: .student, contact: LeoView.contact, nameCard: LeoView()),
     ]
 }
