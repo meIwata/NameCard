@@ -63,7 +63,11 @@ struct PersonDetailView: View {
     var body: some View {
         Group {
             if let contact = person.contact {
-                HarryView(contact: contact)
+                if let card = person.nameCard {
+                    card()
+                } else {
+                    HarryView(contact: contact)
+                }
             } else {
                 VStack {
                     Image(systemName: "person.fill")
