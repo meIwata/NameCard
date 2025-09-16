@@ -50,6 +50,7 @@ struct CategoryContactsView: View {
         for index in offsets {
             modelContext.delete(categoryContacts[index])
         }
+        try? modelContext.save()
     }
 }
 

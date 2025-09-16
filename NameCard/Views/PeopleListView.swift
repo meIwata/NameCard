@@ -136,6 +136,7 @@ struct PeopleListView: View {
     private func deleteCategoryAndMoveContacts(_ category: ContactCategory) {
         // Delete the category
         modelContext.delete(category)
+        try? modelContext.save()
     }
 }
 
@@ -256,6 +257,7 @@ struct UncategorizedContactsView: View {
         for index in offsets {
             modelContext.delete(uncategorizedContacts[index])
         }
+        try? modelContext.save()
     }
 }
 
