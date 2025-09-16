@@ -23,7 +23,7 @@ extension ZoeCard {
                 
                 Text(initials.uppercased())
                     .font(.system(size: size * 0.6, weight: .heavy, design: .rounded))
-                    .foregroundStytle(fg)
+                    .foregroundStyle(fg)
                     .tracking(1.2)
             }
             
