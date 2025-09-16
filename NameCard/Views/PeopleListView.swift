@@ -97,6 +97,14 @@ struct PeopleListView: View {
                 }
             }
             .navigationTitle("Directory")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: StatisticsView()) {
+                        Image(systemName: "chart.bar")
+                            .foregroundStyle(.blue)
+                    }
+                }
+            }
             .sheet(isPresented: $showingAddContact) {
                 AddContactView()
             }
