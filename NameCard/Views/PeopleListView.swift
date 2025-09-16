@@ -63,13 +63,20 @@ struct PersonDetailView: View {
     var body: some View {
         Group {
             if let contact = person.contact {
-                switch person.name{
-                case "Harry":
+                // Route to appropriate name card view based on person's name
+                switch person.name.lowercased() {
+                case "harry":
                     HarryView(contact: contact)
+                case "roger":
+                    RogerView(contact: contact)
                 case "Zoe":
-                    ZoeView(contact: contact)
+                    ZoeView(contact: contact)  
                 default:
-                    HarryView(contact: contact)
+                    if let nameCard = person.nameCard {
+                        AnyView(nameCard)
+                    } else {
+                        HarryView(contact: contact) // Default fallback
+                    }
                 }
             } else {
                 VStack {
