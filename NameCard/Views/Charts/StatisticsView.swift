@@ -67,17 +67,9 @@ struct CategoryDistributionChart: View {
                 .frame(height: 200)
             } else {
                 Chart(data) { item in
-                    SectorMark(
-                        angle: .value("Count", item.count),
-                        innerRadius: .ratio(0.4),
-                        angularInset: 1.5
-                    )
-                    .foregroundStyle(Color(hex: item.color))
-                    .opacity(0.8)
+                    // TODO: Swift Charts
                 }
                 .frame(height: 200)
-                .chartLegend(position: .bottom, alignment: .center)
-//                .chartAngleSelection(value: .constant(nil))
             }
         }
         .padding()
@@ -104,22 +96,9 @@ struct ContactsOverTimeChart: View {
                 .frame(height: 200)
             } else {
                 Chart(data) { item in
-                    BarMark(
-                        x: .value("Period", item.period),
-                        y: .value("Count", item.count)
-                    )
-                    .foregroundStyle(.blue.gradient)
+                    // TODO: Swift Charts
                 }
                 .frame(height: 200)
-                .chartYAxis {
-                    AxisMarks(position: .leading)
-                }
-                .chartXAxis {
-                    AxisMarks { _ in
-                        AxisValueLabel()
-                            .font(.caption)
-                    }
-                }
             }
         }
         .padding()
@@ -268,7 +247,117 @@ struct StatCard: View {
     }
 }
 
+// Build an in-memory SwiftData container and seed sample data for charts
+let container: ModelContainer = {
+    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(
+        for: StoredContact.self, ContactCategory.self,
+        configurations: configuration
+    )
+    let context = container.mainContext
 
-#Preview {
+    // Sample categories
+    let friends = ContactCategory(name: "Friends", colorHex: "FF3B30")
+    let work = ContactCategory(name: "Work", colorHex: "34C759")
+    let family = ContactCategory(name: "Family", colorHex: "007AFF")
+
+    context.insert(friends)
+    context.insert(work)
+    context.insert(family)
+
+    // Sample contacts (some categorized, one uncategorized)
+    let contacts: [StoredContact] = [
+        StoredContact(
+            firstName: "Alice",
+            lastName: "Smith",
+            title: "Engineer",
+            organization: "Acme Corp",
+            email: "alice@acme.com",
+            phone: "555-1111",
+            address: "1 Infinite Loop, Cupertino, CA",
+            website: "https://acme.com",
+            department: "R&D",
+            category: work
+        ),
+        StoredContact(
+            firstName: "Bob",
+            lastName: "Johnson",
+            title: "Designer",
+            organization: "Freelance",
+            email: "",
+            phone: "555-2222",
+            address: "",
+            website: "",
+            department: "",
+            category: friends
+        ),
+        StoredContact(
+            firstName: "Carol",
+            lastName: "Lee",
+            title: "Teacher",
+            organization: "Springfield High",
+            email: "carol.lee@school.edu",
+            phone: "",
+            address: "123 School St",
+            website: "",
+            department: "Math",
+            category: family
+        ),
+        // Uncategorised contact to exercise the "Uncategorized" bucket
+        StoredContact(
+            firstName: "David",
+            lastName: "Ng",
+            title: "",
+            organization: "",
+            email: "david@example.com",
+            phone: "",
+            address: "",
+            website: "",
+            department: "",
+            category: nil
+        )
+    ]
+
+    contacts.forEach { context.insert($0) }
+
+    return container
+}()
+
+struct WrappedPieView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var categories: [ContactCategory]
+    @Query private var allContacts: [StoredContact]
+
+    var body: some View {
+        CategoryDistributionChart(
+            data: allContacts.categoryDistribution(categories: categories)
+        )
+    }
+}
+
+#Preview("Pie Chart") {
+    WrappedPieView()
+        .modelContainer(container)
+}
+
+struct WrappedBarView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var categories: [ContactCategory]
+    @Query private var allContacts: [StoredContact]
+
+    var body: some View {
+        ContactsOverTimeChart(
+            data: allContacts.contactsAddedOverTime()
+        )
+    }
+}
+
+#Preview("Bar Chart") {
+    WrappedBarView()
+        .modelContainer(container)
+}
+
+#Preview("Statistics (Seeded)") {
     StatisticsView()
+        .modelContainer(container)
 }
