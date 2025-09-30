@@ -35,7 +35,8 @@ class StoredContact {
         address: String = "",
         website: String = "",
         department: String = "",
-        category: ContactCategory? = nil
+        category: ContactCategory? = nil,
+        dateAdded: Date = Date()
     ) {
         self.id = UUID()
         self.firstName = firstName
@@ -47,7 +48,7 @@ class StoredContact {
         self.address = address
         self.website = website
         self.department = department
-        self.dateAdded = Date()
+        self.dateAdded = dateAdded
         self.category = category
     }
 
