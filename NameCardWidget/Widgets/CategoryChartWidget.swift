@@ -102,7 +102,8 @@ struct SmallCategoryChartView: View {
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
-        .padding()
+        .padding(12)
+        .widgetURL(URL(string: "namecard://statistics"))
     }
 }
 
@@ -133,7 +134,7 @@ struct MediumCategoryChartView: View {
                 ForEach(entry.distribution.prefix(4)) { item in
                     HStack(spacing: 6) {
                         Circle()
-                            .fill(Color(hex: item.colorHex) ?? .blue)
+                            .fill(Color(hex: item.colorHex))
                             .frame(width: 8, height: 8)
 
                         Text(item.name)
@@ -155,7 +156,8 @@ struct MediumCategoryChartView: View {
                 }
             }
         }
-        .padding()
+        .padding(12)
+        .widgetURL(URL(string: "namecard://statistics"))
     }
 }
 
@@ -206,7 +208,7 @@ struct LargeCategoryChartView: View {
                 ForEach(entry.distribution) { item in
                     HStack(spacing: 6) {
                         Circle()
-                            .fill(Color(hex: item.colorHex) ?? .blue)
+                            .fill(Color(hex: item.colorHex))
                             .frame(width: 10, height: 10)
 
                         VStack(alignment: .leading, spacing: 2) {
@@ -225,7 +227,8 @@ struct LargeCategoryChartView: View {
                 }
             }
         }
-        .padding()
+        .padding(12)
+        .widgetURL(URL(string: "namecard://statistics"))
     }
 }
 
@@ -262,7 +265,8 @@ struct CategoryChartWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("Category Distribution")
-        .description("View your contacts distributed across categories.")
+        .description("View your contacts distributed across categories. Tap to view detailed statistics.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .contentMarginsDisabled()
     }
 }

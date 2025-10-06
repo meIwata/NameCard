@@ -10,42 +10,40 @@ struct StatisticsView: View {
     let people = Person.sampleData
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    // Contact Distribution by Category
-                    CategoryDistributionChart(
-                        data: allContacts.categoryDistribution(categories: categories)
-                    )
+        ScrollView {
+            LazyVStack(spacing: 20) {
+                // Contact Distribution by Category
+                CategoryDistributionChart(
+                    data: allContacts.categoryDistribution(categories: categories)
+                )
 
-                    // Contacts Added Over Time
-                    ContactsOverTimeChart(
-                        data: allContacts.contactsAddedOverTime()
-                    )
+                // Contacts Added Over Time
+                ContactsOverTimeChart(
+                    data: allContacts.contactsAddedOverTime()
+                )
 
-                    // Teachers vs Students
-                    PersonTypeDistributionChart(
-                        data: people.typeDistribution()
-                    )
+                // Teachers vs Students
+                PersonTypeDistributionChart(
+                    data: people.typeDistribution()
+                )
 
-                    // Field Completeness
-                    FieldCompletenessChart(
-                        data: allContacts.fieldCompleteness()
-                    )
+                // Field Completeness
+                FieldCompletenessChart(
+                    data: allContacts.fieldCompleteness()
+                )
 
-                    // Summary Stats
-                    SummaryStatsView(
-                        totalContacts: allContacts.count,
-                        totalCategories: categories.count,
-                        teachersCount: people.filter { $0.type == .teacher }.count,
-                        studentsCount: people.filter { $0.type == .student }.count
-                    )
-                }
-                .padding()
+                // Summary Stats
+                SummaryStatsView(
+                    totalContacts: allContacts.count,
+                    totalCategories: categories.count,
+                    teachersCount: people.filter { $0.type == .teacher }.count,
+                    studentsCount: people.filter { $0.type == .student }.count
+                )
             }
-            .navigationTitle("Statistics")
-            .navigationBarTitleDisplayMode(.large)
+            .padding()
         }
+        .navigationTitle("Statistics")
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 

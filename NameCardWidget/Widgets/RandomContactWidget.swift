@@ -1,6 +1,20 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import AppIntents
+
+// MARK: - Refresh Intent
+
+struct RefreshContactIntent: AppIntent {
+    static var title: LocalizedStringResource = "Refresh Contact"
+    static var description = IntentDescription("Load a new random contact")
+
+    func perform() async throws -> some IntentResult {
+        // Reload all Random Contact widgets
+        WidgetCenter.shared.reloadTimelines(ofKind: "RandomContactWidget")
+        return .result()
+    }
+}
 
 // MARK: - Random Contact Widget
 
@@ -61,15 +75,23 @@ struct RandomContactWidgetView: View {
 
 struct SmallRandomContactView: View {
     let contact: StoredContact
+    @Environment(\.widgetRenderingMode) var renderingMode
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Image(systemName: "person.circle.fill")
                     .font(.title2)
                     .foregroundStyle(categoryColor)
 
                 Spacer()
+
+                Button(intent: RefreshContactIntent()) {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
             }
 
             Spacer()
@@ -98,7 +120,7 @@ struct SmallRandomContactView: View {
                 }
             }
         }
-        .padding()
+        .padding(12)
         .widgetURL(deepLinkURL)
     }
 
@@ -138,9 +160,20 @@ struct MediumRandomContactView: View {
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text(contact.fullName)
-                    .font(.headline)
-                    .lineLimit(1)
+                HStack {
+                    Text(contact.fullName)
+                        .font(.headline)
+                        .lineLimit(1)
+
+                    Spacer()
+
+                    Button(intent: RefreshContactIntent()) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
 
                 if !contact.title.isEmpty {
                     Text(contact.title)
@@ -175,7 +208,7 @@ struct MediumRandomContactView: View {
 
             Spacer()
         }
-        .padding()
+        .padding(12)
         .widgetURL(deepLinkURL)
     }
 
@@ -226,6 +259,13 @@ struct LargeRandomContactView: View {
                 }
 
                 Spacer()
+
+                Button(intent: RefreshContactIntent()) {
+                    Image(systemName: "arrow.clockwise.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
             }
 
             Divider()
@@ -250,7 +290,7 @@ struct LargeRandomContactView: View {
 
             Spacer()
         }
-        .padding()
+        .padding(12)
         .widgetURL(deepLinkURL)
     }
 
@@ -317,8 +357,9 @@ struct RandomContactWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("Random Contact")
-        .description("Display a random contact from your collection. Tap to view details.")
+        .description("Display a random contact from your collection. Tap to view details or refresh for a new contact.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .contentMarginsDisabled()
     }
 }
 

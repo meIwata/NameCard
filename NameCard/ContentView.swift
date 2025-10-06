@@ -20,14 +20,24 @@ struct ContentView: View {
     }
 
     private func handleDeepLink(_ url: URL) {
-        // Deep link format: namecard://contact/{uuid}
-        guard url.scheme == "namecard",
-              url.host == "contact" else {
+        guard url.scheme == "namecard" else {
             print("❌ Invalid deep link URL: \(url)")
             return
         }
 
-        // Extract UUID from URL path
+        // Handle different deep link types
+        switch url.host {
+        case "contact":
+            handleContactDeepLink(url)
+        case "statistics":
+            handleStatisticsDeepLink()
+        default:
+            print("❌ Unknown deep link host: \(url.host ?? "nil")")
+        }
+    }
+
+    private func handleContactDeepLink(_ url: URL) {
+        // Deep link format: namecard://contact/{uuid}
         let uuidString = url.lastPathComponent
         guard !uuidString.isEmpty,
               let uuid = UUID(uuidString: uuidString) else {
@@ -35,7 +45,7 @@ struct ContentView: View {
             return
         }
 
-        print("✅ Deep link received: \(uuid)")
+        print("✅ Contact deep link received: \(uuid)")
 
         // Find the contact
         let descriptor = FetchDescriptor<StoredContact>(
@@ -48,7 +58,7 @@ struct ContentView: View {
                 print("✅ Found contact: \(contact.fullName)")
 
                 // Clear existing path and navigate to contact
-                navigationPath = NavigationPath()
+                navigationPath.removeLast(navigationPath.count)
 
                 // First append category if exists, then the contact
                 if let category = contact.category {
@@ -61,6 +71,15 @@ struct ContentView: View {
         } catch {
             print("❌ Error fetching contact: \(error)")
         }
+    }
+
+    private func handleStatisticsDeepLink() {
+        // Deep link format: namecard://statistics
+        print("✅ Statistics deep link received")
+
+        // Clear existing path and navigate to statistics
+        navigationPath.removeLast(navigationPath.count)
+        navigationPath.append("statistics")
     }
 }
 
