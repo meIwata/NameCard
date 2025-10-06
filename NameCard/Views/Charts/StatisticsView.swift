@@ -67,9 +67,16 @@ struct CategoryDistributionChart: View {
                 .frame(height: 200)
             } else {
                 Chart(data) { item in
-                    // TODO: Swift Charts
+                    SectorMark(
+                        angle: .value("Count", item.count),
+                        innerRadius: .ratio(0.4),
+                        angularInset: 1.5
+                    )
+                    .foregroundStyle(Color(hex: item.color))
+                    .opacity(0.8)
                 }
                 .frame(height: 200)
+                .chartLegend(position: .bottom, alignment: .center)
             }
         }
         .padding()
@@ -96,9 +103,22 @@ struct ContactsOverTimeChart: View {
                 .frame(height: 200)
             } else {
                 Chart(data) { item in
-                    // TODO: Swift Charts
+                    BarMark(
+                        x: .value("Period", item.period),
+                        y: .value("Count", item.count)
+                    )
+                    .foregroundStyle(.blue.gradient)
                 }
                 .frame(height: 200)
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartXAxis {
+                    AxisMarks { _ in
+                        AxisValueLabel()
+                            .font(.caption)
+                    }
+                }
             }
         }
         .padding()
