@@ -7,6 +7,8 @@ struct PeopleListView: View {
     @Query private var categories: [ContactCategory]
     @Query private var allContacts: [StoredContact]
 
+    @Binding var navigationPath: NavigationPath
+
     @State private var showingAddContact = false
     @State private var showingAddCategory = false
     @State private var showingDeleteAlert = false
@@ -29,7 +31,7 @@ struct PeopleListView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             List {
                 Section("Teachers") {
                     ForEach(teachersSorted) { person in
@@ -130,6 +132,12 @@ struct PeopleListView: View {
                         Text("Are you sure you want to delete the \"\(category.name)\" category? \(contactCount) contact\(contactCount == 1 ? "" : "s") will be moved to Uncategorized.")
                     }
                 }
+            }
+            .navigationDestination(for: ContactCategory.self) { category in
+                CategoryContactsView(category: category)
+            }
+            .navigationDestination(for: StoredContact.self) { contact in
+                StoredContactDetailView(contact: contact)
             }
         }
     }
@@ -284,5 +292,5 @@ struct UncategorizedContactsView: View {
 }
 
 #Preview {
-    PeopleListView()
+    PeopleListView(navigationPath: .constant(NavigationPath()))
 }
