@@ -86,7 +86,9 @@ struct SmallRandomContactView: View {
 
                 Spacer()
 
-                Button(intent: RefreshContactIntent()) {
+                Button {
+                    // TODO: AppIntent
+                } label: {
                     Image(systemName: "arrow.clockwise")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -121,7 +123,7 @@ struct SmallRandomContactView: View {
             }
         }
         .padding(12)
-        .widgetURL(deepLinkURL)
+        // TODO: DeepLink
     }
 
     private var categoryColor: Color {

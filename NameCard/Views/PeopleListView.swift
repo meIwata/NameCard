@@ -101,7 +101,6 @@ struct PeopleListView: View {
             .navigationTitle("Directory")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-//                    NavigationLink(destination: StatisticsView()) {
                     Button {
                         navigationPath.append("statistics")
                     } label: {
@@ -137,14 +136,14 @@ struct PeopleListView: View {
                 }
             }
             .navigationDestination(for: ContactCategory.self) { category in
-                CategoryContactsView(category: category)
+                // TODO: CategoryContactsView(category: category)
             }
             .navigationDestination(for: StoredContact.self) { contact in
-                StoredContactDetailView(contact: contact)
+                // TODO: StoredContactDetailView(contact: contact)
             }
             .navigationDestination(for: String.self) { destination in
                 if destination == "statistics" {
-                    StatisticsView()
+                    // TODO: StatisticsView()
                 }
             }
         }

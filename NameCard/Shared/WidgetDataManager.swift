@@ -7,8 +7,12 @@ struct WidgetDataManager {
     private let modelContainer: ModelContainer
 
     private init() {
+        // TODO: 1. 設定 App Group
         let appGroupIdentifier = "group.com.buildwithharry.NameCard"
-        let storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)!
+
+        // TODO: 2. 設定 SQLite 位置，存放在 App Group 內
+        let storeURL = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)!
             .appendingPathComponent("NameCard.sqlite")
 
         let configuration = ModelConfiguration(url: storeURL)
@@ -95,7 +99,7 @@ struct WidgetDataManager {
 // MARK: - Widget Data Models
 
 struct CategoryDistributionData: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     let name: String
     let count: Int
     let colorHex: String

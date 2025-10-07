@@ -12,8 +12,12 @@ import SwiftData
 struct NameCardApp: App {
     // Shared model container for app and widgets
     static let sharedModelContainer: ModelContainer = {
+        // TODO: App Group
         let appGroupIdentifier = "group.com.buildwithharry.NameCard"
-        let storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)!
+
+        // TODO: SQLite
+        let storeURL = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)!
             .appendingPathComponent("NameCard.sqlite")
 
         let configuration = ModelConfiguration(url: storeURL)
