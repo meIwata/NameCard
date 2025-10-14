@@ -1,14 +1,15 @@
 import SwiftUI
 import SwiftData
-
+import WidgetKit
+ 
 struct PeopleListView: View {
     let people = Person.sampleData
     @Environment(\.modelContext) private var modelContext
     @Query private var categories: [ContactCategory]
     @Query private var allContacts: [StoredContact]
-
+ 
     @Binding var navigationPath: NavigationPath
-
+ 
     @State private var showingAddContact = false
     @State private var showingAddCategory = false
     @State private var showingDeleteAlert = false
@@ -21,11 +22,11 @@ struct PeopleListView: View {
     var studentsSorted: [Person] {
         people.filter { $0.type == .student }.sorted { $0.name < $1.name }
     }
-
+ 
     var categoriesSorted: [ContactCategory] {
         categories.sorted { $0.name < $1.name }
     }
-
+ 
     var uncategorizedContacts: [StoredContact] {
         allContacts.filter { $0.category == nil }.sorted { $0.fullName < $1.fullName }
     }
@@ -48,7 +49,7 @@ struct PeopleListView: View {
                         }
                     }
                 }
-
+ 
                 Section {
                     ForEach(categoriesSorted, id: \.id) { category in
                         NavigationLink(destination: CategoryContactsView(category: category)) {
@@ -56,14 +57,14 @@ struct PeopleListView: View {
                         }
                     }
                     .onDelete(perform: deleteCategory)
-
+ 
                     if !uncategorizedContacts.isEmpty {
                         NavigationLink(destination: UncategorizedContactsView()) {
                             HStack {
                                 Circle()
                                     .fill(Color.gray)
                                     .frame(width: 12, height: 12)
-
+ 
                                 VStack(alignment: .leading) {
                                     Text("Uncategorized")
                                         .font(.headline)
@@ -85,7 +86,7 @@ struct PeopleListView: View {
                             } label: {
                                 Label("Add Contact", systemImage: "person.badge.plus")
                             }
-
+ 
                             Button {
                                 showingAddCategory = true
                             } label: {
@@ -100,6 +101,15 @@ struct PeopleListView: View {
             }
             .navigationTitle("Directory")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                                    Button {
+                                        WidgetCenter.shared.reloadAllTimelines()
+                                    } label: {
+                                        Image(systemName: "arrow.clockwise")
+                                            .foregroundStyle(.blue)
+                                    }
+                                }
+                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         navigationPath.append("statistics")
@@ -136,10 +146,10 @@ struct PeopleListView: View {
                 }
             }
             .navigationDestination(for: ContactCategory.self) { category in
-                // TODO: CategoryContactsView(category: category)
+                CategoryContactsView(category: category)
             }
             .navigationDestination(for: StoredContact.self) { contact in
-                // TODO: StoredContactDetailView(contact: contact)
+                StoredContactDetailView(contact:contact)
             }
             .navigationDestination(for: String.self) { destination in
                 if destination == "statistics" {
@@ -148,21 +158,21 @@ struct PeopleListView: View {
             }
         }
     }
-
+ 
     private func deleteCategory(offsets: IndexSet) {
         guard let index = offsets.first else { return }
         let category = categoriesSorted[index]
         categoryToDelete = category
         showingDeleteAlert = true
     }
-
+ 
     private func deleteCategoryAndMoveContacts(_ category: ContactCategory) {
         // Delete the category
         modelContext.delete(category)
         try? modelContext.save()
     }
 }
-
+ 
 struct PersonRowView: View {
     let person: Person
     
@@ -184,7 +194,7 @@ struct PersonRowView: View {
         .padding(.vertical, 2)
     }
 }
-
+ 
 struct PersonDetailView: View {
     let person: Person
     
@@ -198,7 +208,7 @@ struct PersonDetailView: View {
                 case "roger":
                     RogerView(contact: contact)
                 case "Zoe":
-                    ZoeView(contact: contact)  
+                    ZoeView(contact: contact)
                 default:
                     if let nameCard = person.nameCard {
                         AnyView(nameCard)
@@ -225,16 +235,16 @@ struct PersonDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
+ 
 struct CategoryRowView: View {
     let category: ContactCategory
-
+ 
     var body: some View {
         HStack {
             Circle()
                 .fill(Color(hex: category.colorHex))
                 .frame(width: 12, height: 12)
-
+ 
             VStack(alignment: .leading) {
                 Text(category.name)
                     .font(.headline)
@@ -246,17 +256,17 @@ struct CategoryRowView: View {
         }
     }
 }
-
+ 
 struct UncategorizedContactsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var allContacts: [StoredContact]
     @State private var showingAddContact = false
-
+ 
     private var uncategorizedContacts: [StoredContact] {
         allContacts.filter { $0.category == nil }
             .sorted { $0.fullName < $1.fullName }
     }
-
+ 
     var body: some View {
         List {
             if uncategorizedContacts.isEmpty {
@@ -289,7 +299,7 @@ struct UncategorizedContactsView: View {
             AddContactView()
         }
     }
-
+ 
     private func deleteContacts(offsets: IndexSet) {
         for index in offsets {
             modelContext.delete(uncategorizedContacts[index])
@@ -297,7 +307,7 @@ struct UncategorizedContactsView: View {
         try? modelContext.save()
     }
 }
-
+ 
 #Preview {
     PeopleListView(navigationPath: .constant(NavigationPath()))
 }
