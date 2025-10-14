@@ -153,7 +153,7 @@ struct PeopleListView: View {
             }
             .navigationDestination(for: String.self) { destination in
                 if destination == "statistics" {
-                    // TODO: StatisticsView()
+                    StatisticsView()
                 }
             }
         }
